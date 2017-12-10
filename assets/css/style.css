@@ -51,6 +51,6 @@ img {
     clear: both;
 }
 
-.yourChar{
+.yourChar, .opponent{
     height: 100px;
 }

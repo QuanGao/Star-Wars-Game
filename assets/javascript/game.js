@@ -26,7 +26,6 @@ $(document).ready(function() {
     var reset = function(){
         $(".icons").empty();
         $(".yourChar").empty(chosen);
-        $(".yourChar").empty(chosen);
         $(".waitRoom").empty(enemies);
         $(".opponent").empty();
         $(".progress").empty();
@@ -69,6 +68,7 @@ $(document).ready(function() {
                     e_hp = parseInt(firstEnemy.attr("data-hp"));
                     e_force = parseInt(firstEnemy.attr("data-force"));
                     $(".opponent").html(firstEnemy);
+                    firstEnemy.removeClass("enemy");
                     firstEnemy.addClass("defender")
                     gameStatus = 2;             
                 }        
@@ -89,15 +89,51 @@ $(document).ready(function() {
             attackCounter+=1;
             if (c_hp < 0){
                 gameStatus = 0;
-                $(".progress").html("The force has abandoned you! Game over!")
+                $(".progress").text("The force has abandoned you! Game over!")
                 $(".restart").show();
                 $(".restart").on("click", function(){
                 reset();   
                 })
-                
+            }  else if (e_hp < 0){
+                $(".progress").text(`You have defeated ${firstEnemy.attr("data-name")}, you can choose to fight another enemy`)
+                $(".enemy").on("click", function() {
+                    secondEnemy = $(this);
+                    e_hp = parseInt(secondEnemy.attr("data-hp"));
+                    e_force = parseInt(secondEnemy.attr("data-force"));
+                    $(".opponent").html(secondEnemy);
+                    secondEnemy.addClass("defender")
+                    gameStatus = 3;    
+                });
             }         
         }
-            
+       if(gameStatus === 3){
+            c_hp -= e_force;
+            e_hp -= c_force*(attackCounter+1);
+            chosen.find(".hp").text(c_hp);
+            secondEnemy.find(".hp").text(e_hp);
+            message = `<p>You attacked ${secondEnemy.attr("data-name")} for ${c_force*(attackCounter+1)} damage<p>` +  
+            `<p>${secondEnemy.attr("data-name")} attacked you back for ${e_force} damage.<p>`
+            $(".progress").html(message)
+            attackCounter+=1;
+            if (c_hp < 0){
+                gameStatus = 0;
+                $(".progress").text("The force has abandoned you! Game over!")
+                $(".restart").show();
+                $(".restart").on("click", function(){
+                reset();   
+                })
+            }  else if (e_hp < 0){
+                $(".progress").text(`You have defeated ${secondEnemy.attr("data-name")}, you can choose to fight another enemy`)
+                $(".enemy").on("click", function() {
+                    thirdEnemy = $(this);
+                    e_hp = parseInt(thirdEnemy.attr("data-hp"));
+                    e_force = parseInt(thirdEnemy.attr("data-force"));
+                    $(".opponent").html(thirdEnemy);
+                    thirdEnemy.addClass("defender")
+                    gameStatus = 3;    
+                });
+            }                  
+        }     
     });
 
 });
