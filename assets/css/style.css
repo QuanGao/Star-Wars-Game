@@ -1,0 +1,55 @@
+/* html {
+   background-image: url("/Users/quangao/code/week-4-game/assets/images/2560x1600.jpg");
+}; */
+
+body{
+    padding-left: 10px;
+}
+
+h1 {
+    font-size: 40px;
+    font-weight: bold;
+    float: right;
+    margin: 20px 150px 0px 0px;
+}
+
+h2 {
+    font-size: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.icon {
+    box-sizing: border-box;
+    float:left;
+    border: 1px solid green;
+    padding: 20px;
+    height: 100px;
+    Width: 150px;
+}
+
+.enemy {
+    border: 1px solid red;
+}
+
+.defender {
+    border: 1px solid blue;
+}
+.defeated {
+    background-color: green;
+}
+
+img {
+    height: 50px;
+}
+
+.clearfix {
+    clear: both;
+}
+
+.yourChar{
+    height: 100px;
+}
+
+/* ="ememies"><h2>Enemies Available To Attack</h2></div>
+<div class="ring"><h2>Figth Section</h2></div>
+<div class="defender */
