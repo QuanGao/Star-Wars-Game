@@ -29,6 +29,7 @@ h3 {
     padding: 5px;
     height: 100px;
     Width: 150px;
+    text-align: center;
 }
 
 .enemy {
@@ -53,7 +54,3 @@ img {
 .yourChar{
     height: 100px;
 }
-
-/* ="ememies"><h2>Enemies Available To Attack</h2></div>
-<div class="ring"><h2>Figth Section</h2></div>
-<div class="defender */
