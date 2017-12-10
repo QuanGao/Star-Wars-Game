@@ -1,10 +1,8 @@
-/* html {
-   background-image: url("/Users/quangao/code/week-4-game/assets/images/2560x1600.jpg");
-}; */
-
-body{
-    padding-left: 10px;
-}
+body {
+   background-image: url("../images/2560x1600.jpg");
+   font-family: 'Didact Gothic', sans-serif;
+   padding-left: 10px;  
+};
 
 h1 {
     font-size: 40px;
@@ -18,20 +16,19 @@ h2 {
     margin-top: 10px;
     margin-bottom: 10px;
 }
-/* 
-h3 {
-    font-size: 10px;
-} */
+
 .icon {
     box-sizing: border-box;
     float:left;
-    border: 1px solid green;
     padding: 5px;
     height: 100px;
     Width: 150px;
     text-align: center;
 }
 
+.hero {
+    border: 1px solid green;
+}
 .enemy {
     border: 1px solid red;
 }
@@ -53,4 +50,9 @@ img {
 
 .yourChar, .opponent{
     height: 100px;
+}
+
+.progress {
+    margin-top: 5px;
+    line-height: 120%;
 }
