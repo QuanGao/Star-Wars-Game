@@ -55,56 +55,56 @@ $(document).ready(function() {
             newhp.attr("class", "hp")
             newDiv.append(name).append(newImg).append(newhp);
         };
-        $(".hero").on("click", function() {
-            if(chosen === "") {
-                chosen = $(this);
-                $(".yourChar").html(chosen);
-                c_hp = parseInt(chosen.attr("data-hp"));
-                c_force = parseInt(chosen.attr("data-force")); 
-                enemies = $(".hero").not(this);
-                $(".waitRoom").html(enemies);
-                enemies.each(function(){$(this).attr("class","icon enemy");});
+    $(".hero").on("click", function() {
+        if(chosen === "") {
+            chosen = $(this);
+            $(".yourChar").html(chosen);
+            c_hp = parseInt(chosen.attr("data-hp"));
+            c_force = parseInt(chosen.attr("data-force")); 
+            enemies = $(".hero").not(this);
+            $(".waitRoom").html(enemies);
+            enemies.each(function(){$(this).attr("class","icon enemy");});
 
-                $(".enemy").on("click", function() {   
-                    if(enemy === ""){
+            if(enemy === ""){
+                $(".enemy").on("click", function() {                     
                         enemy = $(this);
                         e_hp = parseInt(enemy.attr("data-hp"));
                         e_force = parseInt(enemy.attr("data-force"));
                         enemy.attr("class","icon defender"); 
-                        $(".opponent").html(enemy);
+                        $(".opponent").html(enemy);                   
+                    });
+                };
+                $(".attack").on("click", function(){
+                    if (enemy === ""){
+                        $(".progress").text("There's no enemy here");                       
+                    } else if(c_hp > 0) {
+                        c_hp -= e_force;
+                        e_hp -= c_force + attackCounter*5;
+                        chosen.find(".hp").text(c_hp);
+                        enemy.find(".hp").text(e_hp);
+                        message = `<p>You attacked ${enemy.attr("data-name")} for ${c_force + attackCounter*8} damage<p>` +  
+                        `<p>${enemy.attr("data-name")} attacked you back for ${e_force} damage.<p>`
+                        $(".progress").html(message)
+                        attackCounter+=1;
+                        console.log(attackCounter);
+                        if(c_hp <= 0){
+                            $(".progress").text("The force has abandoned you! Game over!")
+                            $(".restart").show();
+                        } else if(e_hp <= 0) {
+                            $(".progress").text(`You have defeated ${enemy.attr("data-name")}, you can choose to fight another enemy`)
+                            $(".opponent").empty(enemy);
+                            enemy = "";
+                            enemyCounter+=1;
+                            if(enemyCounter === 3){
+                                $(".progress").text("You've defeated all enemies!")   
+                                $(".restart").show();  
+                            };
+                        };            
                     };
-                    $(".attack").on("click", function(){
-                        if (enemy === ""){
-                            $(".progress").text("There's no enemy here");                       
-                        } else if(c_hp > 0) {
-                            c_hp -= e_force;
-                            e_hp -= c_force*(attackCounter+1);
-                            chosen.find(".hp").text(c_hp);
-                            enemy.find(".hp").text(e_hp);
-                            message = `<p>You attacked ${enemy.attr("data-name")} for ${c_force*(attackCounter+1)} damage<p>` +  
-                            `<p>${enemy.attr("data-name")} attacked you back for ${e_force} damage.<p>`
-                            $(".progress").html(message)
-                            attackCounter+=1;
-                            console.log(attackCounter);
-                            if(c_hp <= 0){
-                                $(".progress").text("The force has abandoned you! Game over!")
-                                $(".restart").show();
-                            } else if(e_hp <= 0) {
-                                $(".progress").text(`You have defeated ${enemy.attr("data-name")}, you can choose to fight another enemy`)
-                                $(".opponent").empty(enemy);
-                                enemy = "";
-                                enemyCounter+=1;
-                                if(enemyCounter === 3){
-                                    $(".progress").text("You've defeated all enemies!")   
-                                    $(".restart").show();  
-                                };
-                            };            
-                        };
-                    });                
-                });        
+                });                      
             };        
         });
     };
     reset();
-    $(".restart").on("click", function(){reset(); });   
+    $(".restart").on("click", function(){reset();});   
 });
