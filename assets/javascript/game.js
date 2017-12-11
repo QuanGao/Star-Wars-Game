@@ -87,12 +87,13 @@ $(document).ready(function() {
                         $(".progress").html(message)
                         attackCounter+=1;
                     };
-                    if(c_hp < 0){
+                    if(c_hp <= 0){
                         $(".progress").text("The force has abandoned you! Game over!")
                         $(".restart").show();
-                    } else if(e_hp < 0) {
+                    } else if(e_hp <= 0) {
                         $(".progress").text(`You have defeated ${enemy.attr("data-name")}, you can choose to fight another enemy`)
                         $(".opponent").empty(enemy);
+                        e_force = 0;
                         enemyCounter+=1;
                         enemy = "";
                         if(enemyCounter === 3){

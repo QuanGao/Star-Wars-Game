@@ -1,18 +1,27 @@
 body {
-   background-image: url("../images/2560x1600.jpg");
-   font-family: 'Didact Gothic', sans-serif;
-   padding-left: 10px;  
+   background-image: url("../images/chooper.jpg");
+   -webkit-background-size: cover;
+   -moz-background-size: cover;
+   -o-background-size: cover;
+   background-size: cover;
+   padding-left: 15px;
+   color: white; 
 };
 
+header {
+   height: 50px;
+}
+
 h1 {
-    font-size: 40px;
-    font-weight: bold;
     float: right;
-    margin: 20px 150px 0px 0px;
+    font-size: 40px;
+    font-family: 'Spectral SC', serif;
+    margin: 15px 50px 10px 0px;
+    color: yellow;
 }
 
 h2 {
-    font-size: 30px;
+    font-size: 25px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
@@ -24,17 +33,18 @@ h2 {
     height: 100px;
     Width: 150px;
     text-align: center;
+    background: grey;
 }
 
 .hero {
-    border: 1px solid green;
+    border: 2px solid green;
 }
 .enemy {
-    border: 1px solid red;
+    border: 2px solid red;
 }
 
 .defender {
-    border: 1px solid blue;
+    border: 2px solid blue;
 }
 .defeated {
     background-color: green;
