@@ -6,6 +6,7 @@ body {
    background-size: cover;
    padding-left: 15px;
    color: white; 
+   font-family: sans-serif;
 };
 
 header {
@@ -29,11 +30,12 @@ h2 {
 .icon {
     box-sizing: border-box;
     float:left;
-    padding: 5px;
+    padding-top: 5px;
     height: 100px;
     Width: 150px;
     text-align: center;
     background: grey;
+    font-size: 14px;
 }
 
 .hero {
@@ -51,7 +53,7 @@ h2 {
 }
 
 img {
-    height: 50px;
+    height: 65%;
 }
 
 .clearfix {
