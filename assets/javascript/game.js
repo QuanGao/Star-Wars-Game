@@ -55,36 +55,40 @@ $(document).ready(function() {
             newhp.attr("class", "hp")
             newDiv.append(name).append(newImg).append(newhp);
         };
-    $(".hero").on("click", function() {
-        if(chosen === "") {
-            chosen = $(this);
-            $(".yourChar").html(chosen);
-            c_hp = parseInt(chosen.attr("data-hp"));
-            c_force = parseInt(chosen.attr("data-force")); 
-            enemies = $(".hero").not(this);
-            $(".waitRoom").html(enemies);
-            enemies.each(function(){$(this).attr("class","icon enemy");});
 
-            if(enemy === ""){
-                $(".enemy").on("click", function() {                     
+        $(".hero").on("click", function() {
+            if(chosen === "") {
+                chosen = $(this);
+                $(".yourChar").html(chosen);
+                c_hp = parseInt(chosen.attr("data-hp"));
+                c_force = parseInt(chosen.attr("data-force"));
+                enemies = $(".hero").not(this);
+                $(".waitRoom").html(enemies);
+                enemies.each(function(){$(this).attr("class","icon enemy");});
+                chosen.attr("class","icon selected")
+
+                $(".enemy").on("click", function() { 
+                    if(enemy === ""){                    
                         enemy = $(this);
                         e_hp = parseInt(enemy.attr("data-hp"));
                         e_force = parseInt(enemy.attr("data-force"));
                         enemy.attr("class","icon defender"); 
-                        $(".opponent").html(enemy);                   
-                    });
-                };
+                        $(".opponent").html(enemy); 
+                    };                  
+                });
+
                 $(".attack").on("click", function(){
                     if (enemy === ""){
                         $(".progress").text("There's no enemy here");                       
                     } else if(c_hp > 0) {
+                        var newForce = c_force + attackCounter*8;
                         c_hp -= e_force;
-                        e_hp -= c_force + attackCounter*5;
+                        e_hp -= newForce;
                         chosen.find(".hp").text(c_hp);
                         enemy.find(".hp").text(e_hp);
-                        message = `<p>You attacked ${enemy.attr("data-name")} for ${c_force + attackCounter*8} damage<p>` +  
+                        message = `<p>You attacked ${enemy.attr("data-name")} for ${newForce} damage<p>` +  
                         `<p>${enemy.attr("data-name")} attacked you back for ${e_force} damage.<p>`
-                        $(".progress").html(message)
+                        $(".progress").html(message);
                         attackCounter+=1;
                         console.log(attackCounter);
                         if(c_hp <= 0){

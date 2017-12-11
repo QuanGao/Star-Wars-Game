@@ -38,7 +38,7 @@ h2 {
     font-size: 14px;
 }
 
-.hero {
+.hero, .selected {
     border: 2px solid green;
 }
 .enemy {
