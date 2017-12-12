@@ -9,7 +9,9 @@ $(document).ready(function() {
     var e_force = 0;
     var attackCounter = 0;
     var enemyCounter = 0;
-    var message = ""; 
+    var message = "";
+    var clashEle = $(".saberClash");
+    var themeSong = $(".opening"); 
 
     function hero (name,hp,force,img) {
         this.name = name;
@@ -79,11 +81,11 @@ $(document).ready(function() {
                 };                
             });
         }); 
-
         $(".attack").unbind("click").bind("click", function(){
             if(enemy === ""){
                 $(".progress").text("There's no enemy here");                       
-            } else if(c_hp > 0) {                
+            } else if(c_hp > 0) {
+                clashEle[0].play();                
                 var newForce = c_force + attackCounter*8;
                 attackCounter+=1;   
                 e_hp -= newForce;
@@ -112,5 +114,16 @@ $(document).ready(function() {
         });                      
     };
     $(".restart").on("click", function(){reset();});
+    $(".theme").click(function(){
+        $(this).toggleClass("active");
+        if($(this).hasClass("active")){
+            $(this).text("pause"); 
+            themeSong[0].play();       
+        } else {
+            $(this).text("play");
+            themeSong[0].pause();
+        };
+    });
+
     reset();  
 });
