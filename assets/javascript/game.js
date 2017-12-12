@@ -17,10 +17,10 @@ $(document).ready(function() {
         this.force = force;
         this.img = img;
     };
-    var obi = new hero ("Obi-Wan Kenobi", 128, 8, "assets/images/svg/obiwan.svg");
+    var obi = new hero ("Obi-Wan Kenobi", 120, 8, "assets/images/svg/obiwan.svg");
     var chew = new hero ("Chewbacca", 100, 5, "assets/images/svg/chewbacca.svg");
-    var vader = new hero ("Lord Vader", 150, 25, "assets/images/svg/darthVader.svg");
-    var maul = new hero ("Darth Maul", 180, 28, "assets/images/svg/darthMaul.svg");
+    var vader = new hero ("Lord Vader", 150, 20, "assets/images/svg/darthVader.svg");
+    var maul = new hero ("Darth Maul", 180, 25, "assets/images/svg/darthMaul.svg");
     var heros = [obi, chew, vader, maul];
 
     var reset = function(){
@@ -70,8 +70,7 @@ $(document).ready(function() {
             };
     
             $(".enemy").on("click", function() {
-                if (enemy === "") {  
-                    console.log("enemy clicked")                 
+                if(enemy === "") {               
                     enemy = $(this);
                     e_hp = parseInt(enemy.attr("data-hp"));
                     e_force = parseInt(enemy.attr("data-force"));
@@ -82,34 +81,34 @@ $(document).ready(function() {
         }); 
 
         $(".attack").unbind("click").bind("click", function(){
-            if (enemy === ""){
+            if(enemy === ""){
                 $(".progress").text("There's no enemy here");                       
-            } else if(c_hp > 0) {
-                console.log("attack clicked") 
+            } else if(c_hp > 0) {                
                 var newForce = c_force + attackCounter*8;
-                c_hp -= e_force;
+                attackCounter+=1;   
                 e_hp -= newForce;
-                chosen.find(".hp").text(c_hp);
                 enemy.find(".hp").text(e_hp);
-                message = `<p>You attacked ${enemy.attr("data-name")} for ${newForce} damage<p>` +  
-                `<p>${enemy.attr("data-name")} attacked you back for ${e_force} damage.<p>`
-                $(".progress").html(message);
-                attackCounter+=1;
-                console.log(attackCounter);
-                if(c_hp <= 0){
-                    $(".progress").text("The force has abandoned you! Game over!")
-                    $(".restart").show();
-                } else if(e_hp <= 0) {
+                if(e_hp <= 0) {
                     $(".progress").text(`You have defeated ${enemy.attr("data-name")}, you can choose to fight another enemy`)
                     $(".opponent").empty(enemy);
                     enemy = "";
                     enemyCounter+=1;
+                    e_force = 0;
                     if(enemyCounter === 3){
                         $(".progress").text("You've defeated all enemies!")   
                         $(".restart").show();  
                     };
-                };            
-            };
+                };
+                c_hp -= e_force;
+                chosen.find(".hp").text(c_hp);
+                message = `<p>You attacked ${enemy.attr("data-name")} for ${newForce} damage<p>` + `<p>${enemy.attr("data-name")} attacked you back for ${e_force} damage.<p>`                
+                $(".progress").html(message); 
+                if(c_hp <= 0){
+                    $(".progress").text("The force has abandoned you! Game over!")
+                    $(".restart").show(); 
+                };     
+            };            
+           
         });                      
     };
     $(".restart").on("click", function(){reset();});
