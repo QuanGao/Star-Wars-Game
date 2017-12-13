@@ -57,20 +57,25 @@ $(document).ready(function() {
             newhp.attr("class", "hp")
             newDiv.append(name).append(newImg).append(newhp);
         }; 
+
+        // if I don't wrap .enemy click in .hero click, it doesn't work. Even when I remove class "hero", 
+        // console.log still logs when i click on "enemy"
         $(".hero").on("click", function() {
-            // console.log("hero clicked")
-            if(chosen === "") {
-                console.log("hero clicked")
+            console.log("hero clicked")
+            if(chosen === "") {            
                 chosen = $(this);
                 $(".yourChar").html(chosen);
                 c_hp = parseInt(chosen.attr("data-hp"));
                 c_force = parseInt(chosen.attr("data-force"));
                 enemies = $(".hero").not(this);
                 $(".waitRoom").html(enemies);
+                enemies.each(function(){$(this).removeClass("hero");});
                 enemies.each(function(){$(this).attr("class","icon enemy");});
+                chosen.removeClass("hero");
                 chosen.attr("class","icon selected")
             };
-    
+        // }); 
+ 
             $(".enemy").on("click", function() {
                 if(enemy === "") {               
                     enemy = $(this);
@@ -81,6 +86,9 @@ $(document).ready(function() {
                 };                
             });
         }); 
+            
+        //when I wrap .enemy click in hero click, I need to do this unblnd thing so that my attack counter 
+        //doesnt fire twice when I reset game;
         $(".attack").unbind("click").bind("click", function(){
             if(enemy === ""){
                 $(".progress").text("There's no enemy here");                       
