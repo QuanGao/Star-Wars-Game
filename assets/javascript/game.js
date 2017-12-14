@@ -1,7 +1,6 @@
 
 $(document).ready(function() {
     var chosen = "";
-    var enemies = "";
     var enemy = "";
     var c_hp = 0;
     var c_force = 0;
@@ -9,9 +8,8 @@ $(document).ready(function() {
     var e_force = 0;
     var attackCounter = 0;
     var enemyCounter = 0;
-    var message = "";
-    var clashEle = $(".saberClash");
-    var themeSong = $(".opening"); 
+    var isHeroChosen = false;
+    var isEnimeyChosen = false;
 
     function hero (name,hp,force,img) {
         this.name = name;
@@ -34,10 +32,11 @@ $(document).ready(function() {
         $(".restart").hide();
         attackCounter = 0;
         enemyCounter = 0;
-        message = "";
         chosen = "";
-        enemies = "";
         enemy = "";
+        isHeroChosen = false;
+        isEnimeyChosen = false;
+
         for (i = 0; i < heros.length; i++){
             var newhero= heros[i];
             var newDiv = $("<div>");            
@@ -56,82 +55,78 @@ $(document).ready(function() {
             newhp.text(newhero.hp);
             newhp.attr("class", "hp")
             newDiv.append(name).append(newImg).append(newhp);
-        }; 
-
-        // if I don't wrap .enemy click in .hero click, it doesn't work. Even when I remove class "hero", 
-        // console.log still logs when i click on "enemy"
-        $(".hero").on("click", function() {
-            console.log("hero clicked")
-            if(chosen === "") {            
-                chosen = $(this);
-                $(".yourChar").html(chosen);
-                c_hp = parseInt(chosen.attr("data-hp"));
-                c_force = parseInt(chosen.attr("data-force"));
-                enemies = $(".hero").not(this);
-                $(".waitRoom").html(enemies);
-                enemies.each(function(){$(this).removeClass("hero");});
-                enemies.each(function(){$(this).attr("class","icon enemy");});
-                chosen.removeClass("hero");
-                chosen.attr("class","icon selected")
-            };
-        // }); 
+        };
+    }; 
+    reset();
+    $(".icons").on("click", ".hero", function() {
+        console.log(isHeroChosen);
+        if(!isHeroChosen) {            
+            chosen = $(this);
+            var notChosen = $(".hero").not(this)
+            $(".yourChar").html(chosen);
+            c_hp = parseInt(chosen.attr("data-hp"));
+            c_force = parseInt(chosen.attr("data-force"));
+            $(".waitRoom").html(notChosen);
+            notChosen.removeClass("hero");
+            notChosen.addClass("enemy");
+            chosen.removeClass("hero");
+            chosen.addClass("selected");
+            isHeroChosen = true;
+        };
+    }); 
  
-            $(".enemy").on("click", function() {
-                if(enemy === "") {               
-                    enemy = $(this);
-                    e_hp = parseInt(enemy.attr("data-hp"));
-                    e_force = parseInt(enemy.attr("data-force"));
-                    enemy.attr("class","icon defender"); 
-                    $(".opponent").html(enemy); 
-                };                
-            });
-        }); 
-            
-        //when I wrap .enemy click in hero click, I need to do this unblnd thing so that my attack counter 
-        //doesnt fire twice when I reset game;
-        $(".attack").unbind("click").bind("click", function(){
-            if(enemy === ""){
-                $(".progress").text("There's no enemy here");                       
-            } else if(c_hp > 0) {
-                clashEle[0].play();                
-                var newForce = c_force + attackCounter*8;
-                attackCounter+=1;   
-                e_hp -= newForce;
-                enemy.find(".hp").text(e_hp);
-                if(e_hp <= 0) {
-                    $(".progress").text(`You have defeated ${enemy.attr("data-name")}, you can choose to fight another enemy`)
-                    $(".opponent").empty(enemy);
-                    enemy = "";
-                    enemyCounter+=1;
-                    e_force = 0;
-                    if(enemyCounter === 3){
-                        $(".progress").text("You've defeated all enemies!")   
-                        $(".restart").show();  
-                    };
+    $(".waitRoom").on("click",".enemy",function() {
+        console.log("enimy cicked");
+        if(!isEnimeyChosen) {               
+            enemy = $(this);
+            e_hp = parseInt(enemy.attr("data-hp"));
+            e_force = parseInt(enemy.attr("data-force"));
+            enemy.attr("class","icon defender"); 
+            $(".opponent").html(enemy); 
+            isEnimeyChosen = true; 
+        };                
+    });
+
+    $(".attack").unbind("click").bind("click", function(){
+        if(!isEnimeyChosen){
+            $(".progress").text("There's no enemy here");                       
+        } else if(c_hp > 0) {
+            $(".saberClash")[0].play();               
+            var newForce = c_force + attackCounter*8;
+            attackCounter+=1;   
+            e_hp -= newForce;
+            enemy.find(".hp").text(e_hp);
+            if(e_hp <= 0) {
+                $(".progress").text(`You have defeated ${enemy.attr("data-name")}, you can choose to fight another enemy`)
+                $(".opponent").empty(enemy);
+                isEnimeyChosen = false;
+                enemyCounter+=1;
+                e_force = 0;
+                if(enemyCounter === 3){
+                    $(".progress").text("You've defeated all enemies!")   
+                    $(".restart").show();  
                 };
-                c_hp -= e_force;
-                chosen.find(".hp").text(c_hp);
-                message = `<p>You attacked ${enemy.attr("data-name")} for ${newForce} damage<p>` + `<p>${enemy.attr("data-name")} attacked you back for ${e_force} damage.<p>`                
-                $(".progress").html(message); 
-                if(c_hp <= 0){
-                    $(".progress").text("The force has abandoned you! Game over!")
-                    $(".restart").show(); 
-                };     
-            };            
-           
-        });                      
-    };
+            };
+            c_hp -= e_force;
+            chosen.find(".hp").text(c_hp);
+            var message = `<p>You attacked ${enemy.attr("data-name")} for ${newForce} damage<p>` + `<p>${enemy.attr("data-name")} attacked you back for ${e_force} damage.<p>`                
+            $(".progress").html(message); 
+            if(c_hp <= 0){
+                $(".progress").text("The force has abandoned you! Game over!")
+                $(".restart").show(); 
+            };     
+        };                       
+    });                      
     $(".restart").on("click", function(){reset();});
     $(".theme").click(function(){
         $(this).toggleClass("active");
         if($(this).hasClass("active")){
             $(this).text("pause"); 
-            themeSong[0].play();       
+            $(".opening")[0].play();       
         } else {
             $(this).text("play");
-            themeSong[0].pause();
+            $(".opening")[0].pause();
         };
     });
-
-    reset();  
 });
+
