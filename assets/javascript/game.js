@@ -87,7 +87,8 @@ $(document).ready(function() {
         };                
     });
 
-    $(".attack").unbind("click").bind("click", function(){
+    // $(".attack").unbind("click").bind("click", function(){
+    $(".attack").on("click", function(){
         if(!isEnimeyChosen){
             $(".progress").text("There's no enemy here");                       
         } else if(c_hp > 0) {
@@ -116,7 +117,8 @@ $(document).ready(function() {
                 $(".restart").show(); 
             };     
         };                       
-    });                      
+    });  
+
     $(".restart").on("click", function(){reset();});
     $(".theme").click(function(){
         $(this).toggleClass("active");
