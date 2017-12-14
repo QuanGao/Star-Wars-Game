@@ -85,7 +85,7 @@ $(document).ready(function() {
         $(".progress").text("You've defeated all enemies!")   
         $(".restart").show();  
     };
-    var onLost = function(){
+    var onLose = function(){
         $(".progress").text("The force has abandoned you! Game over!")
         $(".restart").show(); 
     }
