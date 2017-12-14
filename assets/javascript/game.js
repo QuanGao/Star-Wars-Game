@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
     var chosen = "";
     var enemy = "";
@@ -22,6 +21,34 @@ $(document).ready(function() {
     var vader = new hero ("Lord Vader", 150, 20, "assets/images/svg/darthVader.svg");
     var maul = new hero ("Darth Maul", 180, 25, "assets/images/svg/darthMaul.svg");
     var heros = [obi, chew, vader, maul];
+    var getHp = function(jedi){
+        return parseInt(jedi.attr("data-hp"));
+    };
+    var getForce = function(jedi){
+        return parseInt(jedi.attr("data-force"));
+    };
+
+    var displayHeros = function(arr){
+        for (i = 0; i < arr.length; i++){
+            var newhero= heros[i];
+            var newDiv = $("<div>");            
+            var name = $("<p>")
+            var newImg = $("<img>");
+            var newhp = $("<p>");
+            newDiv.attr({   
+                "class": "icon hero",
+                "data-force": newhero.force,
+                "data-hp": newhero.hp,
+                "data-name": newhero.name 
+            });                   
+            $(".icons").append(newDiv);          
+            name.text(newhero.name);
+            newImg.attr("src", newhero.img);
+            newhp.text(newhero.hp);
+            newhp.attr("class", "hp")
+            newDiv.append(name).append(newImg).append(newhp);
+        };
+    };
 
     var reset = function(){
         $(".icons").empty();
@@ -32,62 +59,38 @@ $(document).ready(function() {
         $(".restart").hide();
         attackCounter = 0;
         enemyCounter = 0;
-        chosen = "";
-        enemy = "";
         isHeroChosen = false;
         isEnimeyChosen = false;
-
-        for (i = 0; i < heros.length; i++){
-            var newhero= heros[i];
-            var newDiv = $("<div>");            
-            var name = $("<p>")
-            var newImg = $("<img>");
-            var newhp = $("<p>");
-            newDiv.attr({   
-                "class": "icon hero",
-                "data-force": newhero.force,
-                "data-hp": newhero.hp,
-                "data-name": newhero.name
-            });         
-            $(".icons").append(newDiv);          
-            name.text(newhero.name);
-            newImg.attr("src", newhero.img);
-            newhp.text(newhero.hp);
-            newhp.attr("class", "hp")
-            newDiv.append(name).append(newImg).append(newhp);
-        };
+        displayHeros(heros);
     }; 
     reset();
+
     $(".icons").on("click", ".hero", function() {
-        console.log(isHeroChosen);
         if(!isHeroChosen) {            
             chosen = $(this);
-            var notChosen = $(".hero").not(this)
             $(".yourChar").html(chosen);
-            c_hp = parseInt(chosen.attr("data-hp"));
-            c_force = parseInt(chosen.attr("data-force"));
+            c_hp = getHp(chosen);
+            c_force = getForce(chosen);
+            console.log(c_hp);
+            var notChosen = $(".hero").not(this);
             $(".waitRoom").html(notChosen);
-            notChosen.removeClass("hero");
+            $(".icon").removeClass("hero");
             notChosen.addClass("enemy");
-            chosen.removeClass("hero");
-            chosen.addClass("selected");
             isHeroChosen = true;
         };
     }); 
  
     $(".waitRoom").on("click",".enemy",function() {
-        console.log("enimy cicked");
         if(!isEnimeyChosen) {               
             enemy = $(this);
-            e_hp = parseInt(enemy.attr("data-hp"));
-            e_force = parseInt(enemy.attr("data-force"));
+            e_hp = getHp(enemy);
+            e_force = getForce(enemy);
             enemy.attr("class","icon defender"); 
             $(".opponent").html(enemy); 
             isEnimeyChosen = true; 
         };                
     });
-
-    // $(".attack").unbind("click").bind("click", function(){
+    
     $(".attack").on("click", function(){
         if(!isEnimeyChosen){
             $(".progress").text("There's no enemy here");                       
