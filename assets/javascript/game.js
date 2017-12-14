@@ -1,6 +1,4 @@
 $(document).ready(function() {
-    var chosen = "";
-    var enemy = "";
     var c_hp = 0;
     var c_force = 0;
     var e_hp = 0 ;
@@ -21,71 +19,99 @@ $(document).ready(function() {
     var vader = new hero ("Lord Vader", 150, 20, "assets/images/svg/darthVader.svg");
     var maul = new hero ("Darth Maul", 180, 25, "assets/images/svg/darthMaul.svg");
     var heros = [obi, chew, vader, maul];
+
     var getHp = function(jedi){
         return parseInt(jedi.attr("data-hp"));
     };
     var getForce = function(jedi){
         return parseInt(jedi.attr("data-force"));
     };
-
+    var addHeroStatsToDivAttri = function(heroObj,div){
+        div.attr({   
+            "class": "icon hero",
+            "data-force": heroObj.force,
+            "data-hp": heroObj.hp,
+            "data-name": heroObj.name 
+        }); 
+    };
+    var insertImageHpNameToDiv = function(heroObj,div){
+        var name = $("<p>")
+        var newImg = $("<img>");
+        var newhp = $("<p>");
+        name.text(heroObj.name);
+        newImg.attr("src", heroObj.img);
+        newhp.text(heroObj.hp);
+        newhp.attr("class", "hp");
+        div.append(name).append(newImg).append(newhp);
+    };
     var displayHeros = function(arr){
         for (i = 0; i < arr.length; i++){
             var newhero= heros[i];
             var newDiv = $("<div>");            
-            var name = $("<p>")
-            var newImg = $("<img>");
-            var newhp = $("<p>");
-            newDiv.attr({   
-                "class": "icon hero",
-                "data-force": newhero.force,
-                "data-hp": newhero.hp,
-                "data-name": newhero.name 
-            });                   
+            addHeroStatsToDivAttri(newhero, newDiv);               
             $(".icons").append(newDiv);          
-            name.text(newhero.name);
-            newImg.attr("src", newhero.img);
-            newhp.text(newhero.hp);
-            newhp.attr("class", "hp")
-            newDiv.append(name).append(newImg).append(newhp);
+            insertImageHpNameToDiv(newhero,newDiv)         
         };
     };
-
-    var reset = function(){
+    var clearDynamicSections = function(){
         $(".icons").empty();
         $(".yourChar").empty();
         $(".waitRoom").empty();
         $(".opponent").empty();
         $(".progress").empty();
         $(".restart").hide();
+    };
+    var reset = function(){
+        clearDynamicSections();
         attackCounter = 0;
         enemyCounter = 0;
         isHeroChosen = false;
         isEnimeyChosen = false;
         displayHeros(heros);
     }; 
+    var changeClass = function(x, oldClass, newClass){
+        x.removeClass(oldClass);
+        x.addClass(newClass)
+    };
+    var onKill = function(enemyJedi){
+        $(".progress").text(`You have defeated ${enemyJedi.attr("data-name")}, you can choose to fight another enemy`)
+        $(".opponent").empty($(enemyJedi));
+        isEnimeyChosen = false;
+        enemyCounter+=1;
+        e_force = 0;
+    };
+
+    var onWin = function(){
+        $(".progress").text("You've defeated all enemies!")   
+        $(".restart").show();  
+    };
+    var onLost = function(){
+        $(".progress").text("The force has abandoned you! Game over!")
+        $(".restart").show(); 
+    }
+
     reset();
 
     $(".icons").on("click", ".hero", function() {
         if(!isHeroChosen) {            
-            chosen = $(this);
+            var chosen = $(this);
             $(".yourChar").html(chosen);
             c_hp = getHp(chosen);
             c_force = getForce(chosen);
-            console.log(c_hp);
             var notChosen = $(".hero").not(this);
             $(".waitRoom").html(notChosen);
-            $(".icon").removeClass("hero");
-            notChosen.addClass("enemy");
+            changeClass(chosen, "hero", "yourChampion");
+            changeClass(notChosen, "hero", "enemy");
             isHeroChosen = true;
         };
     }); 
- 
+
     $(".waitRoom").on("click",".enemy",function() {
         if(!isEnimeyChosen) {               
-            enemy = $(this);
+            var enemy = $(this);
             e_hp = getHp(enemy);
             e_force = getForce(enemy);
-            enemy.attr("class","icon defender"); 
+            changeClass(enemy, "enemy", "defender");
             $(".opponent").html(enemy); 
             isEnimeyChosen = true; 
         };                
@@ -99,25 +125,20 @@ $(document).ready(function() {
             var newForce = c_force + attackCounter*8;
             attackCounter+=1;   
             e_hp -= newForce;
-            enemy.find(".hp").text(e_hp);
+            $(".defender").find(".hp").text(e_hp);
             if(e_hp <= 0) {
-                $(".progress").text(`You have defeated ${enemy.attr("data-name")}, you can choose to fight another enemy`)
-                $(".opponent").empty(enemy);
-                isEnimeyChosen = false;
-                enemyCounter+=1;
-                e_force = 0;
+                onKill($(".defender"));
                 if(enemyCounter === 3){
-                    $(".progress").text("You've defeated all enemies!")   
-                    $(".restart").show();  
+                    onWin();
                 };
-            };
-            c_hp -= e_force;
-            chosen.find(".hp").text(c_hp);
-            var message = `<p>You attacked ${enemy.attr("data-name")} for ${newForce} damage<p>` + `<p>${enemy.attr("data-name")} attacked you back for ${e_force} damage.<p>`                
-            $(".progress").html(message); 
-            if(c_hp <= 0){
-                $(".progress").text("The force has abandoned you! Game over!")
-                $(".restart").show(); 
+            } else {
+                c_hp -= e_force;
+                $(".yourChampion").find(".hp").text(c_hp);
+                var message = `<p>You attacked ${$(".defender").attr("data-name")} for ${newForce} damage<p>` + `<p>${$(".defender").attr("data-name")} attacked you back for ${e_force} damage.<p>`                
+                $(".progress").html(message); 
+                if(c_hp <= 0){
+                    onLose();
+                };
             };     
         };                       
     });  
