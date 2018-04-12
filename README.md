@@ -2,7 +2,7 @@
 
 ### _LIGHT VS DARK side: the responsibility of balancing the force has fallen on YOU._
 
-#### Watch the battles here as Obi-wan defeating Chewbacca, Lord Vader, and Darth Maul as master Kenobi's force grow stronger in battle
+#### Demo: Me as master Kenobi defeating Chewbacca, Lord Vader, and Darth Maul as my force grows stronger in battle
 ![starwars](./gifs/starwars.gif)
 ###### Don't forget to turn on the dramatic theme music! :blush:
 
